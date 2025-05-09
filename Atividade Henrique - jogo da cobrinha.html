@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sketch p5.js Exemplo</title>
+
+  <!-- Importa a biblioteca p5.js (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+
+  <!-- Código JavaScript do sketch p5.js -->
+  <script>
+    var cobrinha, frutinha;
+
+function setup() {
+  createCanvas(400, 420);
+  
+  frameRate(7);
+  
+  cobrinha = new cobra(200,200);
+  frutinha = new fruta();
+  
+}
+
+function draw() {
+  background(50);
+  cobrinha.movimento();
+  cobrinha.morte();
+  cobrinha.atualiza();
+  cobrinha.desenho();
+  
+  barra();
+  
+  frutinha.atualiza(cobrinha.come());
+  frutinha.desenho();
+  
+  grid();
+}
+
+class cobra {
+  constructor(x, y){
+    this.position = createVector(x, y);
+    this.direction = createVector(10,0);
+    this.uSentido = "esquerda";
+    this.tamanho = 0;
+    this.cauda = [];
+  }
+  movimento(){
+    
+    if(keyCode === UP_ARROW && this.uSentido != "baixo"){
+    this.direction.set(0,-10);
+    this.uSentido = "cima"
+  }
+    if(keyCode === DOWN_ARROW && this.uSentido != "cima"){
+    this.direction.set(0,10);
+    this.uSentido = "baixo"
+  }
+    if(keyCode === LEFT_ARROW && this.uSentido != "direita"){
+    this.direction.set(-10,0);
+    this.uSentido = "esquerda"
+  }
+    if(keyCode === RIGHT_ARROW && this.uSentido != "esquerda"){
+    this.direction.set(10,0);
+    this.uSentido = "direita"
+  }
+  }
+  
+  atualiza(){
+    
+    
+    if(this.tamanho === this.cauda.length){
+    for(var i = 0; i < this.cauda.length -1; i++){
+      this.cauda[i] = this.cauda[i+1];
+    }
+    }
+    
+    if(this.tamanho > 0){
+    this.cauda[this.tamanho-1] = createVector(this.position.x, this.position.y);
+    }
+      
+    this.position.add(this.direction);
+    
+    this.position.x = constrain (this.position.x, 0, width -10);
+    this.position.y = constrain (this.position.y, 0, height - 30);
+  }
+  
+  come(){
+    var distancia = dist(this.position.x, this.position.y, frutinha.position.x, frutinha.position.y)
+    if (distancia < 1){
+      this.tamanho++;
+      return true;
+    } else{
+      return false;
+    }
+    
+  }
+  
+  desenho(){
+    fill(255); 
+    for(var i = 0; i <this.cauda.length; i++){
+      rect(this.cauda[i].x, this.cauda[i].y,10,10)
+    }
+    
+    fill(255);
+    rect(this.position.x,this.position.y,10,10);
+  }
+  
+  morte(){
+    
+    //caso1
+    for(var i = 0; i <this.cauda.length; i++){
+     var posicao = this.cauda[i];
+     var distancia = dist(this.position.x, this.position.y, posicao.x, posicao.y);
+     if(distancia < 1){
+       this.reset();
+     }
+    }
+    //caso2
+    if (this.position.x < 0){
+      this.reset();
+  }
+    if (this.position.y < 0){
+      this.reset();
+  }
+    if (this.position.x > width){
+      this.reset();
+  }
+    if (this.position.y > height - 20){
+      this.reset();
+  }
+  }
+  
+  reset(){
+    this.tamanho = 0;
+    this.cauda = [];
+    this.position.set(200,200);
+    frutinha.comidos = 0; 
+  }
+  
+}
+
+class fruta {
+  constructor(){
+    this.position = createVector(int(random(0,40))*10, int(random(0,40))*10);
+    
+    this.comidos = 0;
+  }
+  
+  atualiza(teste){
+    if(teste == true){
+      this.position.set(int(random(0,40))*10, int(random(0,40))*10);
+      this.comidos++;
+    }
+  }
+  
+  desenho(){
+    fill(255,0,0);
+    rect(this.position.x,this.position.y,10,10);
+    
+    textSize(20);
+    fill(0);
+    text('Pontos:', 300,420);
+    text(this.comidos,370,420);
+  }
+}
+
+function grid(){
+  
+  for(var i = 0; i < 40 ; i++) {
+    strokeWeight(1);
+    line(i*10,0,i*10,height - 20);
+    line(0,i*10,width,i*10);
+  }
+}
+
+function barra(){
+  fill(255);
+  rect(0,400,400,20);
+  textSize(20);
+  fill(0);
+  text('Henrique Segundo - Autoração 2', 3,420);  
+}
+  </script>
+</head>
+<body>
+</body>
+</html>
