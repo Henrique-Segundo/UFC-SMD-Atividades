@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sketch p5.js Exemplo</title>
+
+  <!-- Importa a biblioteca p5.js (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+
+  <!-- Código JavaScript do sketch p5.js -->
+  <script>
+x = 200;
+y = 200;
+px = 100;
+py = 100;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(220);
+  
+    //Interação via mouse
+  if (mouseIsPressed){
+    fill(0);
+  }else{
+    fill(255);
+  }
+  
+  // Múltiplos objetos animados
+  rect(x,0,40,40);
+  rect(0,y,40,40);
+  rect(x,y,40,40);
+  x++;
+  y++;
+  if (x > 399  || x < 0){
+    x = 0;
+    y = 0;
+  }
+
+  //Uso de laços para repetição
+  for(i = 0; i < 10;i++){
+    rect(i*40 + 5, 350,30,30)
+  }
+  
+  //Interação via teclado
+
+  
+  circle(px,py,30);
+  if(keyIsDown(LEFT_ARROW) && px > 15){
+    px = px-5;
+  }
+  if(keyIsDown(RIGHT_ARROW) && px < 385){
+    px = px+5;
+  }
+    if(keyIsDown(UP_ARROW) && py > 15){
+    py = py-5;
+  }
+  if(keyIsDown(DOWN_ARROW) && py < 385){
+    py = py+5;
+  }
+}
+  </script>
+</head>
+<body>
+</body>
+</html>
