@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="style.css">
+    <title>Usando Vetores e P5.js</title>
+
+<!-- Importa a biblioteca p5.js (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+
+  <!-- Código JavaScript do sketch p5.js -->
+  <script>
+
+let posicoes = [];    // array de vetores de posição das bolinhas
+let velocidades = []; // array de vetores de velocidade das bolinhas
+let corBolas = [];    // array de cores das bolinhas
+let tamanho = [];     // array do tamanho das bolinhas
+let numBolas = 10;    // quantidade de bolinhas (podemos alterar para experimentar)
+let gravidade = []; //efeito da gravidade
+
+function setup() {
+    createCanvas(600, 400); // cria um canvas de 600x400 pixels
+  // Inicializa posições e velocidades
+  
+  noStroke();            // sem contorno nas bolinhas (trocado do draw pois não ha motivo para manter lá)
+  
+  gravidade = createVector(0, 0.1);
+  
+  for (let i = 0; i < numBolas; i++) {
+    // Posição aleatória dentro dos limites do canvas
+    let pos = createVector(random(0, width), random(0, height));
+    // Velocidade aleatória: componente x entre -3 e 3, componente y entre -3 e 3
+    let vel = createVector(random(-3, 3), random(-3, 3));
+    //cor aleatoria das bolas
+    let cor = createVector( int(random(0, 255)),int(random(0, 255)),int(random(0, 255)));
+    let raio = int(random(10, 40));
+    
+    // Adiciona esses vetores aos arrays
+    posicoes.push(pos);
+    velocidades.push(vel);
+    corBolas.push(cor);
+    tamanho.push(raio);
+    
+}
+}
+
+function draw() {
+  background(51); // limpa a tela com um fundo cinza escuro (51 é um tom de cinza)
+
+  // Loop através de todas as bolinhas
+  for (let i = 0; i < numBolas; i++) {
+    let pos = posicoes[i];
+    let vel = velocidades[i];
+    let corR = (corBolas[i].x);
+    let corG = (corBolas[i].y);
+    let corB = (corBolas[i].z);
+    let t = tamanho[i];
+    
+    // Atualiza posição somando velocidade
+    pos.add(vel);
+    
+    velocidades[i].add(gravidade);
+
+    // Verifica colisões com as bordas e inverte velocidade se necessário
+    if (pos.x - t < 0 || pos.x + t > width) {
+      vel.x = vel.x * -1;
+    }
+    if (pos.y - t < 0 || pos.y + t > height) {
+      vel.y = vel.y * -1;
+    }
+    
+    fill(corR,corG,corB);   // define a cor de preenchimento (baseado no vetor) das bolinhas
+    // Desenha a bolinha baseado no tamanho do vetor na posição i
+    ellipse(pos.x, pos.y, t*2, t*2);
+  }
+}
+
+function mouseClicked() {
+    let pos = createVector(mouseX, mouseY);
+    // Velocidade aleatória: componente x entre -3 e 3, componente y entre -3 e 3
+    let vel = createVector(random(-3, 3), random(-3, 3));
+    //cor aleatoria das bolas
+    let cor = createVector( int(random(0, 255)),int(random(0, 255)),int(random(0, 255)));
+    let raio = int(random(10, 40));
+    
+    // Adiciona esses vetores aos arrays
+    posicoes.push(pos);
+    velocidades.push(vel);
+    corBolas.push(cor);
+    tamanho.push(raio);
+  
+    numBolas++;
+}
+
+</script>
+</head>
+<body>
+    <div class="section">
+        <h2>Vetores e P5.js</h2>
+        <p>
+            Neste exemplo, utilizamos a biblioteca P5.js para criar uma visualização interativa de vetores. Através de vetores, podemos representar posições e velocidades de objetos em um espaço bidimensional.
+        </p>
+        <p>
+            O código JavaScript utiliza a função <code>createVector()</code> para criar vetores que representam posições e velocidades, e métodos como <code>.add()</code> para atualizar as posições.
+        </p>
+        <div id="vetores"></div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
+    <script src="vetores.js"></script>
+
+
+</body>
+</html>
